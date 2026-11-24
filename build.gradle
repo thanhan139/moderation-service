@@ -1,0 +1,37 @@
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
+plugins {
+    id 'org.springframework.boot' version '3.5.3' apply false
+}
+
+subprojects {
+    apply plugin: 'java-library'
+
+    group = 'com.coreflows'
+    version = '0.0.1-SNAPSHOT'
+
+    repositories {
+        mavenCentral()
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.release = 21
+        options.encoding = 'UTF-8'
+        options.compilerArgs << '-parameters'
+    }
+
+    dependencies {
+        def bom = platform(SpringBootPlugin.BOM_COORDINATES)
+        implementation bom
+        annotationProcessor bom
+        testImplementation bom
+
+        testImplementation 'org.junit.jupiter:junit-jupiter'
+        testImplementation 'org.assertj:assertj-core'
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    }
+
+    tasks.withType(Test).configureEach {
+        useJUnitPlatform()
+    }
+}

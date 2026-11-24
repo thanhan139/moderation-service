@@ -1,0 +1,65 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-moderation-actions
+      author: moderation-service
+      changes:
+        - createTable:
+            tableName: moderation_actions
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: target_type
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: target_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: action
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: reason
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: moderator_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp without time zone
+                  constraints:
+                    nullable: false
+        - sql:
+            sql: >
+              ALTER TABLE moderation_actions ADD CONSTRAINT ck_moderation_actions_target_type
+              CHECK (target_type IN ('BUSINESS', 'KOC'))
+        - sql:
+            sql: >
+              ALTER TABLE moderation_actions ADD CONSTRAINT ck_moderation_actions_action
+              CHECK (action IN ('WARNING', 'SUSPENSION', 'BAN'))
+        - createIndex:
+            tableName: moderation_actions
+            indexName: idx_moderation_actions_target
+            columns:
+              - column:
+                  name: target_type
+              - column:
+                  name: target_id
+              - column:
+                  name: created_at
+      rollback:
+        - dropTable:
+            tableName: moderation_actions

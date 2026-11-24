@@ -1,0 +1,3 @@
+rootProject.name = 'moderation-service'
+
+include 'core', 'api', 'infra', 'apps'

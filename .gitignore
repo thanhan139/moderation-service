@@ -1,0 +1,56 @@
+# Gradle / build output
+.gradle/
+build/
+/out/
+/*/out/
+/bin/
+/*/bin/
+*.class
+!gradle/wrapper/gradle-wrapper.jar
+.kotlin/
+*.hprof
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.project
+.classpath
+.factorypath
+.sts4-cache/
+nbproject/
+
+# Local config / secrets
+.env
+.env.*
+!.env.example
+application-local.yml
+application-local.yaml
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+docker-compose.override.yml
+compose.override.yaml
+
+# AI assistant local config
+.claude/
+CLAUDE.local.md
+
+# Logs & temp
+logs/
+*.log
+*.tmp
+*.swp
+*~
+HELP.md
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini

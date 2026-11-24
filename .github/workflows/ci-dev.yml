@@ -1,0 +1,16 @@
+# CI/CD dùng chung — logic nằm ở VodyaSimp/ci-workflows (service-ci.yml).
+name: CI (DEV)
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  ci:
+    uses: VodyaSimp/ci-workflows/.github/workflows/service-ci.yml@main
+    permissions:
+      contents: read
+      packages: write
+    secrets: inherit

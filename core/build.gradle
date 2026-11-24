@@ -1,0 +1,1 @@
+// Domain + application layer: không thêm dependency framework (Spring, JPA, Jakarta...)
