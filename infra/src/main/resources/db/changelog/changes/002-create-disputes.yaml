@@ -1,0 +1,105 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-create-disputes
+      author: moderation-service
+      changes:
+        - createTable:
+            tableName: disputes
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: campaign_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: task_id
+                  type: uuid
+                  constraints:
+                    nullable: true
+              - column:
+                  name: raised_by_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: moderator_id
+                  type: uuid
+                  constraints:
+                    nullable: true
+              - column:
+                  name: category
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(20)
+                  defaultValue: open
+                  constraints:
+                    nullable: false
+              - column:
+                  name: decision
+                  type: varchar(20)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: resolution
+                  type: text
+                  constraints:
+                    nullable: true
+              - column:
+                  name: created_at
+                  type: timestamp without time zone
+                  constraints:
+                    nullable: false
+              - column:
+                  name: resolved_at
+                  type: timestamp without time zone
+                  constraints:
+                    nullable: true
+        - sql:
+            sql: >
+              ALTER TABLE disputes ADD CONSTRAINT ck_disputes_category
+              CHECK (category IN ('content', 'payment', 'sample'))
+        - sql:
+            sql: >
+              ALTER TABLE disputes ADD CONSTRAINT ck_disputes_status
+              CHECK (status IN ('open', 'in_review', 'closed'))
+        - sql:
+            sql: >
+              ALTER TABLE disputes ADD CONSTRAINT ck_disputes_decision
+              CHECK (decision IS NULL OR decision IN ('accepted', 'rejected', 'adjusted'))
+        - createIndex:
+            tableName: disputes
+            indexName: idx_disputes_status_created
+            columns:
+              - column:
+                  name: status
+              - column:
+                  name: created_at
+        - createIndex:
+            tableName: disputes
+            indexName: idx_disputes_raised_by
+            columns:
+              - column:
+                  name: raised_by_id
+        - createIndex:
+            tableName: disputes
+            indexName: idx_disputes_moderator
+            columns:
+              - column:
+                  name: moderator_id
+      rollback:
+        - dropTable:
+            tableName: disputes

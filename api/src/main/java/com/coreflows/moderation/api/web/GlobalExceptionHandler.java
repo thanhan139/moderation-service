@@ -1,6 +1,7 @@
 package com.coreflows.moderation.api.web;
 
 import com.coreflows.moderation.core.domain.exception.BadRequestException;
+import com.coreflows.moderation.core.domain.exception.DisputeNotFoundException;
 import com.coreflows.moderation.core.domain.exception.DomainException;
 import com.coreflows.moderation.core.domain.exception.ModerationActionNotFoundException;
 import com.coreflows.moderation.core.domain.exception.OperationNotPermittedException;
@@ -22,8 +23,8 @@ public class GlobalExceptionHandler {
         return ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, e.getMessage());
     }
 
-    @ExceptionHandler(ModerationActionNotFoundException.class)
-    public ProblemDetail handleNotFound(ModerationActionNotFoundException e) {
+    @ExceptionHandler({ModerationActionNotFoundException.class, DisputeNotFoundException.class})
+    public ProblemDetail handleNotFound(RuntimeException e) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
     }
 
